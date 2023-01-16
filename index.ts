@@ -1,6 +1,11 @@
 import express from 'express'
 import cors from 'cors'
-import { ref, deleteObject, listAll } from 'firebase/storage'
+import { ref, deleteObject, listAll, getStorage } from 'firebase/storage'
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from './cfg';
+
+initializeApp(firebaseConfig);
+const storage = getStorage();
 
 const PORT = 5000;
 const app = express();
@@ -10,11 +15,11 @@ app.use(express.json())
 
 app.post('/', (req) => {
     setTimeout(() => {
-        const listRef = ref(req.body.storage, req.body.id);
+        const listRef = ref(storage, `${String(req.body.id)}/`);
             listAll(listRef)
             .then((res) => {
                 res.items.forEach((itemRef: any) => {
-                    deleteObject(ref(req.body.storage, `${itemRef._location.path_}`))
+                    deleteObject(ref(storage, `${itemRef?._location?.path_}`))
                     .then(() => {
                         console.log('its okey!')
                     })
@@ -26,7 +31,7 @@ app.post('/', (req) => {
             .catch((error) => {
                 console.log(error)
             });
-    }, 20000);
+    }, 10000 * 6 * 3);
 })
 
 
