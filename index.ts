@@ -20,16 +20,13 @@ app.post('/', (req) => {
             .then((res) => {
                 res.items.forEach((itemRef: any) => {
                     deleteObject(ref(storage, `${itemRef?._location?.path_}`))
-                    .then(() => {
-                        console.log('its okey!')
-                    })
                     .catch((error) => {
-                        console.log(error)
+                        throw new Error(error);
                     });
                 });
             })
             .catch((error) => {
-                console.log(error)
+                throw new Error(error);
             });
     }, 10000 * 6 * 3);
 })

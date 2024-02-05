@@ -1,4 +1,3 @@
-# files-share-server
+# Server for files share
 
-
-server for my project!
+Simple server that deletes current files after 3 mins.
